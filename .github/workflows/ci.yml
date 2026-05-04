@@ -1,0 +1,37 @@
+name: Maven CI Pipeline
+
+# Kích hoạt workflow khi có push hoặc pull_request
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Bước 1: Lấy mã nguồn từ repo
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Bước 2: Cài đặt môi trường Java 17
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven # Tối ưu hóa thời gian tải dependency
+
+      # Bước 3: Chạy test và package (thực thi Maven lifecycle)
+      - name: Build with Maven (Test & Package)
+        run: mvn -B clean package
+
+      # Bước 4: Lưu giữ tệp .jar tạo ra sau khi build thành công
+      - name: Upload JAR artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mathutils-compiled-jar
+          path: target/*.jar
+          retention-days: 7 
