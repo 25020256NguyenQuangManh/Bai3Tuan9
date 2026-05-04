@@ -67,7 +67,7 @@ public class MathUtilsTest {
     @DisplayName("Kiem tra ngoai le divide khi b = 0")
     public void testDivide_BEqualsZero() {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            MathUtils.divide(10, 1);
+            MathUtils.divide(10, 0);
         });
 
         assertEquals("Divider must not be zero", exception.getMessage());
